@@ -50,7 +50,25 @@ function FA_DoExec() {
 
 function download_file()
 {
-	local url=${BASE_URL}/${BOARD}/$1
+		if [[ ${USER_REPLY} = [Nn] ]]; then
+			echo ${USER_REPLY}
+			case $1 in
+			android-lollipop-images.tgz)
+				local url=http://www.mediafire.com/download/g3m6u646sqm167d/android-lollipop-images.tgz;;
+			core-qte-images.tgz)
+				local url=http://www.mediafire.com/download/epmb6e5xg23zmmy/core-qte-images.tgz;;
+			debian-jessie-images.tgz)
+				local url=http://www.mediafire.com/download/nvx15s4zcli0zpc/debian-jessie-images.tgz;;
+			*.md5)
+				local url=${BASE_URL}/${BOARD}/$1;;
+			esac
+
+			break;
+		elif [[ ${USER_REPLY} = [Yy] ]]; then
+			echo ${USER_REPLY}
+			local url=${BASE_URL}/${BOARD}/$1
+			break;
+		fi
 
 	if [ -z $1 ]; then
 		echo "Error downloading file: $1"
@@ -77,6 +95,21 @@ function download_file()
 
 #----------------------------------------------------------
 # download image and verify it
+
+echo -n "Are you in China (Y/N)? "
+	while read -r -n 1 -t 10 -s USER_REPLY; do
+		if [[ ${USER_REPLY} = [Nn] ]]; then
+			echo ${USER_REPLY}
+			break;
+		elif [[ ${USER_REPLY} = [Yy] ]]; then
+			echo ${USER_REPLY}
+			break;
+		fi
+	done
+	if [ -z ${USER_REPLY} ]; then
+		echo "Cancelled."
+		exit 1
+	fi
 
 download_file ${ROMFILE}.hash.md5
 

@@ -33,7 +33,7 @@ if [ -z $1 ]; then
 fi
 
 case $1 in
-/dev/sd[a-z] | /dev/loop[0-9] | /dev/mmcblk1)
+/dev/sd[a-z] | /dev/loop[0-9] | /dev/mmcblk[0-9])
 	if [ ! -e $1 ]; then
 		echo "Error: $1 does not exist."
 		exit 1
@@ -43,7 +43,7 @@ case $1 in
 /dev/sd[a-z])
 	DEV_PART=${DEV_NAME}2
 	REMOVABLE=`cat /sys/block/${DEV_NAME}/removable` ;;
-/dev/mmcblk1 | /dev/loop[0-9])
+/dev/mmcblk[0-9] | /dev/loop[0-9])
 	DEV_PART=${DEV_NAME}p2
 	REMOVABLE=1 ;;
 *)
